@@ -26,7 +26,7 @@ export default function App() {
   // Handle submit form untuk POST user
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch("https://reqres.in/api/users", {
         method: "POST",
@@ -35,12 +35,16 @@ export default function App() {
         },
         body: JSON.stringify(newUser),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         alert("User berhasil ditambahkan!");
-        setUsers([...users, { id: users.length + 1, ...newUser }]);
+        const updatedUsers = [...users, { id: users.length + 1, ...newUser }];
+        setUsers(updatedUsers);
+  
+        localStorage.setItem("users", JSON.stringify(updatedUsers));
+  
         setNewUser({ first_name: "", last_name: "", email: "", avatar: "" });
       } else {
         alert("Gagal menambahkan user.");

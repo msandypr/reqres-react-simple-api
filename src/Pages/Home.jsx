@@ -8,10 +8,19 @@ export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    fetch("https://reqres.in/api/users")
-      .then((response) => response.json())
-      .then((data) => setUsers(data.data))
-      .catch((error) => console.error("Error fetching data:", error));
+    // Ambil data dari local storage
+    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+  
+    // Jika ada data di local storage, gunakan data tersebut
+    if (storedUsers.length > 0) {
+      setUsers(storedUsers);
+    } else {
+
+      fetch("https://reqres.in/api/users")
+        .then((response) => response.json())
+        .then((data) => setUsers(data.data))
+        .catch((error) => console.error("Error fetching data:", error));
+    }
   }, []);
 
   // Fungsi untuk Fetch user dari API
@@ -30,15 +39,19 @@ export default function App() {
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Apakah Anda yakin ingin menghapus user ini?");
     if (!confirmDelete) return;
-
+  
     try {
       const response = await fetch(`https://reqres.in/api/users/${id}`, {
         method: "DELETE",
       });
-
+  
       if (response.ok) {
         alert("User berhasil dihapus!");
-        setUsers(users.filter((user) => user.id !== id)); // Hapus dari state
+        const updatedUsers = users.filter((user) => user.id !== id);
+        setUsers(updatedUsers);
+  
+        // Perbarui data di local storage
+        localStorage.setItem("users", JSON.stringify(updatedUsers));
       } else {
         alert("Gagal menghapus user.");
       }
