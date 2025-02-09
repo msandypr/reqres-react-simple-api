@@ -100,7 +100,7 @@ export default function Home() {
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
 
   return (
-    <div className="min-h-screen w-full font-sans text-gray-900 bg-gray-50">
+    <div className="min-h-screen flex flex-col w-full font-sans text-gray-900 bg-gray-50">
       {/* Navbar */}
       <nav className="bg-white shadow-md p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-600">Application</h1>
@@ -119,7 +119,7 @@ export default function Home() {
       </header>
 
       {/* Data Table Section */}
-      <section className="p-6">
+      <section className="p-6 flex-grow">
         {/* <h3 className="text-3xl font- mb-4 text-center">User Data</h3> */}
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white shadow-md rounded-lg border border-black">
@@ -225,7 +225,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white text-center p-4">
-        <p>&copy; 2025 Test. All Rights Reserved.</p>
+        <p>&copy; 2025 MSandyPR, All Rights Reserved.</p>
       </footer>
     </div>
   );

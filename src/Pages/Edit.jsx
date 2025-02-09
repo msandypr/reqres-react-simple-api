@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 export default function Edit() {
-  const { id } = useParams();
+  const { id } = useParams(); // Ambil ID dari URL
   const navigate = useNavigate();
   const [user, setUser] = useState({
     first_name: "",
     last_name: "",
     email: "",
     avatar: "",
-    isLocal: false,
+    isLocal: false, // Tandai apakah user berasal dari localStorage
   });
 
   // Fetch user dari API atau localStorage berdasarkan ID
@@ -46,39 +46,30 @@ export default function Edit() {
     e.preventDefault();
 
     try {
-      if (user.isLocal) {
+      const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+      // Jika user berasal dari API, simpan sebagai data lokal di localStorage
+      if (!user.isLocal) {
+        const newUser = { ...user, isLocal: true }; // Tandai sebagai data lokal
+        const updatedUsers = [...storedUsers, newUser];
+        localStorage.setItem("users", JSON.stringify(updatedUsers));
+      } else {
         // Jika user berasal dari localStorage, update data di localStorage
-        const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
         const updatedUsers = storedUsers.map((u) =>
           u.id === parseInt(id) ? { ...u, ...user } : u
         );
         localStorage.setItem("users", JSON.stringify(updatedUsers));
-        alert("User berhasil diperbarui!");
-        navigate("/"); // Redirect ke halaman home
-      } else {
-        // Jika user berasal dari API, lakukan PUT request ke API
-        const response = await fetch(`https://reqres.in/api/users/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
-        });
-
-        if (response.ok) {
-          alert("User berhasil diperbarui!");
-          navigate("/");
-        } else {
-          alert("Gagal memperbarui user.");
-        }
       }
+
+      alert("User berhasil diperbarui!");
+      navigate("/"); // Redirect ke halaman home
     } catch (error) {
       console.error("Error updating user:", error);
     }
   };
 
   return (
-    <div className="min-h-screen w-full font-sans text-gray-900 bg-gray-50">
+    <div className="min-h-screen w-full flex flex-col font-sans text-gray-900 bg-gray-50">
       {/* Navbar */}
       <nav className="bg-white shadow-md p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-600">Application</h1>
@@ -89,7 +80,7 @@ export default function Edit() {
       </nav>
 
       {/* Hero Section */}
-      <header className="text-center py-10 bg-gradient-to-r from-gray-500 to-gray-900 text-white">
+      <header className="text-center py-20 bg-gradient-to-r from-gray-500 to-gray-900 text-white">
         <h2 className="text-4xl font-bold mb-4">Edit User</h2>
         {/* <p className="text-lg mb-4">
           Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -98,7 +89,7 @@ export default function Edit() {
       </header>
 
       {/* Form untuk Update User */}
-      <section className="p-6">
+      <section className="p-6 flex-grow">
         {/* <h3 className="text-2xl font-semibold mb-4 text-center">Update User</h3> */}
         <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-white p-6 shadow-md rounded-lg border border-black">
           <div className="mb-4">
@@ -150,6 +141,11 @@ export default function Edit() {
           </button>
         </form>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white text-center p-4">
+        <p>&copy; 2025 MSandyPR, All Rights Reserved.</p>
+      </footer>
     </div>
   );
 }

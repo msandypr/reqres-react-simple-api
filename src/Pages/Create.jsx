@@ -46,7 +46,7 @@ export default function Create() {
   };
 
   return (
-    <div className="min-h-screen w-full font-sans text-gray-900 bg-gray-50">
+    <div className="min-h-screen w-full flex flex-col font-sans text-gray-900 bg-gray-50">
       {/* Navbar */}
       <nav className="bg-white shadow-md p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-600">Application</h1>
@@ -70,7 +70,7 @@ export default function Create() {
       </header>
 
       {/* Form untuk POST User */}
-      <section className="p-6">
+      <section className="p-6 flex-grow">
         <form
           onSubmit={handleSubmit}
           className="max-w-lg mx-auto bg-white p-6 shadow-md rounded-lg border border-black"
@@ -135,6 +135,11 @@ export default function Create() {
           </button>
         </form>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white text-center p-4">
+        <p>&copy; 2025 MSandyPR, All Rights Reserved.</p>
+      </footer>
     </div>
   );
 }
