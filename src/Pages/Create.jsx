@@ -27,6 +27,7 @@ export default function Create() {
     const userWithId = {
       id: users.length + 1,
       ...newUser,
+      isLocal: true,
     };
     // Tambahkan user baru ke daftar users
     const updatedUsers = [...users, userWithId];

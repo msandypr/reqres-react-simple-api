@@ -19,9 +19,9 @@ export default function Home() {
       try {
         const response = await fetch(`https://reqres.in/api/users?page=${page}`);
         const data = await response.json();
-        allUsers = [...allUsers, ...data.data]; 
-        totalPages = data.total_pages; 
-        page++; 
+        allUsers = [...allUsers, ...data.data];
+        totalPages = data.total_pages;
+        page++;
       } catch (error) {
         console.error("Error fetching data:", error);
         break;
@@ -49,13 +49,25 @@ export default function Home() {
 
   // Fungsi untuk fetch detail user
   const fetchUserDetail = async (userId) => {
-    try {
-      const response = await fetch(`https://reqres.in/api/users/${userId}`);
-      const data = await response.json();
-      setSelectedUser(data.data);
-      setIsModalOpen(true);
-    } catch (error) {
-      console.error("Error fetching user detail:", error);
+    // Cari user di state `users`
+    const user = users.find((user) => user.id === userId);
+
+    if (user) {
+      if (user.isLocal) {
+        // Jika user berasal dari localStorage, tampilkan langsung
+        setSelectedUser(user);
+        setIsModalOpen(true);
+      } else {
+        // Jika user berasal dari API, fetch detail dari API
+        try {
+          const response = await fetch(`https://reqres.in/api/users/${userId}`);
+          const data = await response.json();
+          setSelectedUser(data.data);
+          setIsModalOpen(true);
+        } catch (error) {
+          console.error("Error fetching user detail:", error);
+        }
+      }
     }
   };
 
